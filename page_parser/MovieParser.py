@@ -196,7 +196,7 @@ class MovieParser:
         if self.__is_404_page():
             return None
 
-        print(self.__html_doc)
+        # print(self.__html_doc)
 
         self.__set_bs_soup()
 
