@@ -7,7 +7,7 @@ import constants
 import requests
 from login import Entity
 from bs4 import BeautifulSoup
-from PIL import Image
+from pil import Image
 
 
 class CookiesHelper:

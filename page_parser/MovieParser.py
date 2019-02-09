@@ -149,6 +149,13 @@ class MovieParser:
         except:
             pass
 
+    def __get_ratio_poster(self):
+        try:
+            info = self.__soup.find('img', {'rel': 'v:image'})
+            self.__movie['ratio_poster'] = info.attrs["src"]
+        except:
+            pass
+
     @staticmethod
     def __compose_list(list_):
 
@@ -205,6 +212,8 @@ class MovieParser:
         self.__get_description()
         self.__get_others()
         self.__get_scriptwriters()
+        self.__get_ratio_poster()
+        self.__get_posters()
 
         return self.__movie
 

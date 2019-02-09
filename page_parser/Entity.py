@@ -20,5 +20,7 @@ movie = {
     'description': '',
     'tags': '',
     'link': '',
-    'posters': ''
+    'posters': '',
+    # 海报
+    'ratio_poster': ''
 }
