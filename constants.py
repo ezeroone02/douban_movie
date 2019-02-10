@@ -18,8 +18,8 @@ USER_AGENT = [
 AGENT_SIZE = 7
 
 # 延时设置
-DELAY_MIN_SECOND = 0.2
-DELAY_MAX_SECOND = 0.21
+DELAY_MIN_SECOND = 1
+DELAY_MAX_SECOND = 1.5
 
 # 豆瓣电影的url前缀
 URL_PREFIX = 'https://movie.douban.com/subject/'
@@ -31,12 +31,12 @@ RATIO_POSTER_PATH = 'data\\ratio_poster\\'
 这里用到了阿布云代理动态版。使用影梭或者其他代理，甚至不用代理也可以
 """
 # 代理服务器
-proxyHost = "proxy.abuyun.com"
+proxyHost = "http-dyn.abuyun.com"
 proxyPort = "9020"
 
 # 代理隧道验证信息
-proxyUser = "HT1LX50X8R4P0I8D"
-proxyPass = "1133BD889583B72A"
+proxyUser = "H6O0TPY9D5H9TM5D"
+proxyPass = "82F8FD279973D68C"
 
 proxyMeta = "http://%(user)s:%(pass)s@%(host)s:%(port)s" % {
     "host": proxyHost,

@@ -77,9 +77,9 @@ class CookiesHelper:
         data['captcha-solution'] = self.__captcha_solution
 
         session = requests.Session()
-        session.post(
-            constants.DOUBAN_MOVIE_LOGIN_URL,
-            data=data
-        )
+        # session.post(
+        #     constants.DOUBAN_MOVIE_LOGIN_URL,
+        #     data=data
+        # )
 
         return session.cookies.get_dict()

@@ -28,13 +28,23 @@ cookie_helper = CookiesHelper.CookiesHelper(
 cookies = cookie_helper.get_cookies()
 print(cookies)
 
-
 # 实例化爬虫类和数据库连接工具类
 movie_parser = MovieParser.MovieParser()
 db_helper = DbHelper.DbHelper()
 
 Utils.Utils.mkdir(constants.RATIO_POSTER_PATH)
 Utils.Utils.mkdir(constants.DATA_PATH)
+
+# ii = 0
+# while True:
+#     r = requests.get(
+#         "http://test.abuyun.com",
+#
+#         proxies=constants.proxies
+#     )
+#     ii += 1
+#     print(str(r.status_code) + str(ii))
+#     Utils.Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
 
 search_subject_url_prefix = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&start=%s"
 start_value = 0
@@ -53,30 +63,34 @@ while True:
             search_subject_url,
             headers=headers,
             cookies=cookies,
-            proxies=constants.proxies
+            # proxies=constants.proxies
         )
-        if r.status_code == '403':
-            print(search_subject_url+"403")
-            logging.error(search_subject_url+"403")
-            raise ForbiddenError
-            break
-        r.encoding = 'utf-8'
-        search_subject_result = json.loads(r.text)
-        id_list = []
-        if not search_subject_result["data"]:
-            print(search_subject_url+"返回的数据为" + search_subject_result)
-            logging.error(search_subject_url+"返回的数据为" + search_subject_result)
-            break
+    except Exception:
+        logging.error(search_subject_url + "403")
+        Utils.Utils.delay(10, 15)
+        # print("403forbidden")
+        continue
 
-        for subject in search_subject_result["data"]:
-            print(subject["title"]+subject["url"])
-            logging.info(subject["title"]+subject["url"])
-            id_list.append(subject["id"])
-
-        Utils.Utils.request_and_parse_movies(id_list, movie_parser, db_helper, cookies)
-    except ForbiddenError:
-        print("403forbidden")
+    # if r.status_code == '403':
+    #     print(search_subject_url + "403")
+    #     logging.error(search_subject_url + "403")
+    #     raise ForbiddenError
+    #     break
+    r.encoding = 'utf-8'
+    search_subject_result = json.loads(r.text)
+    id_list = []
+    if not search_subject_result["data"]:
+        print(search_subject_url + "返回的数据为" + search_subject_result)
+        logging.error(search_subject_url + "返回的数据为" + search_subject_result)
         break
+
+    for subject in search_subject_result["data"]:
+        print(subject["title"] + subject["url"])
+        logging.info(subject["title"] + subject["url"])
+        id_list.append(subject["id"])
+
+    Utils.Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
+    Utils.Utils.request_and_parse_movies(id_list, movie_parser, db_helper, cookies)
 
     print("start value %s done" % start_value)
     start_value += 20

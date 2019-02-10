@@ -20,25 +20,34 @@ class Utils:
     @staticmethod
     def request_and_parse_movies(id_list, movie_parser, db_helper, cookies):
         logging.info("request_and_parse_movies log")
+        # i=0
+        # while i < len(id_list):
+        #     id = id_list[i]
+
         # 通过ID进行遍历
-        for i in id_list:
-
+        for subject_id in id_list:
             headers = {'User-Agent': random.choice(constants.USER_AGENT)}
+            try:
+                # 获取豆瓣页面(API)数据
+                r = requests.get(
+                    constants.URL_PREFIX + str(subject_id),
+                    headers=headers,
+                    cookies=cookies,
+                    # proxies=constants.proxies
+                )
+            except Exception:
+                print(constants.URL_PREFIX + str(subject_id))
+                id_list.append(subject_id)
+                Utils.delay(10, 15)
+                continue
 
-            # 获取豆瓣页面(API)数据
-            r = requests.get(
-                constants.URL_PREFIX + str(i),
-                headers=headers,
-                cookies=cookies,
-                proxies=constants.proxies
-            )
             r.encoding = 'utf-8'
-            if r.status_code == '403':
-                print(constants.URL_PREFIX + str(i) + "403")
-                raise ForbiddenError
-                break
+            # if r.status_code == '403':
+            #     print(constants.URL_PREFIX + str(subject_id) + "403")
+            #     raise ForbiddenError
+            #     break
             # 提示当前到达的id(log)
-            print('id: ' + str(i))
+            print('id: ' + str(subject_id))
 
             # 提取豆瓣数据
             movie_parser.set_html_doc(r.text)
@@ -46,22 +55,23 @@ class Utils:
 
             # 如果获取的数据为空，延时以减轻对目标服务器的压力,并跳过。
             if not movie:
-                Utils.Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
+                Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
                 continue
 
             # 豆瓣数据有效，写入数据库
-            movie['douban_id'] = str(i)
+            movie['douban_id'] = str(subject_id)
             if movie:
                 db_helper.insert_movie(movie)
 
-            image_name = constants.RATIO_POSTER_PATH + "%s.jpg" % i
+            Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
+            image_name = constants.RATIO_POSTER_PATH + "%s.jpg" % subject_id
             # 下载图片并保存到当前目录
             ratio_poster_image = open(image_name, 'wb')
             retio_poster_request = requests.get(movie['ratio_poster'])
             ratio_poster_image.write(retio_poster_request.content)
             ratio_poster_image.close()
             retio_poster_request.close()
-            logging.info(str(i)+" DONE")
+            logging.info(str(subject_id) + " DONE")
             Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
 
     @staticmethod
