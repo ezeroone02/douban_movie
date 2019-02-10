@@ -32,9 +32,9 @@ class DbHelper:
                 sql = "INSERT IGNORE INTO `movie` (`douban_id`, `title`, `directors`, " \
                       "`scriptwriters`, `actors`, `types`,`release_region`," \
                       "`release_date`,`alias`,`languages`,`duration`,`score`," \
-                      "`description`,`tags`) VALUES (%s," \
+                      "`description`,`tags`,`ratio_poster`) VALUES (%s," \
                       "%s, %s, %s, %s, %s, %s, %s," \
-                      "%s, %s, %s, %s, %s, %s);"
+                      "%s, %s, %s, %s, %s, %s, %s);"
                 cursor.execute(sql, (
                     movie['douban_id'],
                     movie['title'],
@@ -49,7 +49,7 @@ class DbHelper:
                     movie['duration'],
                     movie['score'],
                     movie['description'],
-                    movie['tags']
+                    movie['tags'], movie['ratio_poster']
                 ))
                 self.__connection.commit()
         finally:

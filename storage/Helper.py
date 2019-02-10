@@ -28,9 +28,9 @@ class Helper:
                 sql = "INSERT INTO `movie` (`douban_id`, `title`, `directors`, " \
                       "`scriptwriters`, `actors`, `types`,`release_region`," \
                       "`release_date`,`alias`,`languages`,`duration`,`score`," \
-                      "`description`,`tags`,`link`,`posters`) VALUES (%s," \
+                      "`description`,`tags`,`link`,`posters`,`ratio_poster`) VALUES (%s," \
                       "%s, %s, %s, %s, %s, %s, %s," \
-                      "%s, %s, %s, %s, %s, %s, %s, %s);"
+                      "%s, %s, %s, %s, %s, %s, %s, %s, %s);"
                 cursor.execute(sql, (
                     movie['douban_id'],         movie['title'],
                     movie['directors'],         movie['scriptwriters'],
@@ -39,7 +39,7 @@ class Helper:
                     movie['alias'],             movie['languages'],
                     movie['duration'],          movie['score'],
                     movie['description'],       movie['tags'],
-                    movie['link'],              movie['posters']
+                    movie['link'],              movie['posters'], movie['ratio_poster']
                 ))
                 self.__connection.commit()
         finally:

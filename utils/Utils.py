@@ -7,12 +7,14 @@ import random
 import constants
 import requests
 
+from utils import ForbiddenError
+
 
 class Utils:
 
     @staticmethod
     def delay(min_second, max_second):
-        time.sleep(random.randrange(min_second, max_second))
+        time.sleep(random.uniform(min_second, max_second))
 
     @staticmethod
     def request_and_parse_movies(id_list, movie_parser, db_helper, cookies):
@@ -28,7 +30,10 @@ class Utils:
                 cookies=cookies
             )
             r.encoding = 'utf-8'
-
+            if r.status_code == '403':
+                print(constants.URL_PREFIX + str(i) + "403")
+                raise ForbiddenError
+                break
             # 提示当前到达的id(log)
             print('id: ' + str(i))
 

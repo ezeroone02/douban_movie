@@ -19,13 +19,13 @@ AGENT_SIZE = 7
 
 # 延时设置
 DELAY_MIN_SECOND = 1
-DELAY_MAX_SECOND = 4
+DELAY_MAX_SECOND = 2
 
 # 豆瓣电影的url前缀
 URL_PREFIX = 'https://movie.douban.com/subject/'
 
 DATA_PATH = 'data'
-RATIO_POSTER_PATH = 'data\\ratio_poster'
+RATIO_POSTER_PATH = 'data\\ratio_poster\\'
 
 """
 这里用到了阿布云代理动态版。使用影梭或者其他代理，甚至不用代理也可以

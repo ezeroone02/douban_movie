@@ -10,6 +10,7 @@ import json
 from login import CookiesHelper
 from page_parser import MovieParser
 from utils import Utils
+from utils import ForbiddenError
 from storage import DbHelper
 
 # 读取配置文件信息
@@ -42,28 +43,37 @@ while True:
 
     search_subject_url = search_subject_url_prefix % start_value
     headers = {'User-Agent': random.choice(constants.USER_AGENT)}
+    try:
+        # 获取豆瓣页面(API)数据
+        r = requests.get(
+            search_subject_url,
+            headers=headers,
+            cookies=cookies,
+            # proxies=constants.proxies
+        )
+        if r.status_code == '403':
+            print(search_subject_url+"403")
+            raise ForbiddenError
+            break
+        r.encoding = 'utf-8'
+        search_subject_result = json.loads(r.text)
+        id_list = []
+        if not search_subject_result["data"]:
+            print(search_subject_url+"返回的数据为" + search_subject_result)
+            break
 
-    # 获取豆瓣页面(API)数据
-    r = requests.get(
-        search_subject_url,
-        headers=headers,
-        cookies=cookies,
-        # proxies=constants.proxies
-    )
-    r.encoding = 'utf-8'
-    search_subject_result = json.loads(r.text)
-    id_list = []
-    if not search_subject_result["data"]:
-        print(search_subject_url+"返回的数据为" + search_subject_result)
+        for subject in search_subject_result["data"]:
+            print(subject["title"]+subject["url"])
+            id_list.append(subject["id"])
+
+        Utils.Utils.request_and_parse_movies(id_list, movie_parser, db_helper, cookies)
+    except ForbiddenError:
+        print("403forbidden")
         break
 
-    for subject in search_subject_result["data"]:
-        print(subject["url"])
-        id_list.append(subject["id"])
-
-    Utils.Utils.request_and_parse_movies(id_list, movie_parser, db_helper, cookies)
     start_value += 20
-    Utils.Utils.delay(2, 4)
+
+    Utils.Utils.delay(1, 2)
 
     if start_value > 200000:
         break
