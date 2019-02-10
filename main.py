@@ -28,11 +28,18 @@ print(cookies)
 movie_parser = MovieParser.MovieParser()
 db_helper = DbHelper.DbHelper()
 
-Utils.Utils.mkdir("ratio_poster")
+Utils.Utils.mkdir(constants.RATIO_POSTER_PATH)
+Utils.Utils.mkdir(constants.DATA_PATH)
 
 search_subject_url_prefix = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&start=%s"
+start_value = 0
 while True:
-    start_value = 0
+
+    log_name = constants.DATA_PATH + "\\start_value.txt"
+    log_file = open(log_name, 'w')
+    log_file.write(str(start_value))
+    log_file.close()
+
     search_subject_url = search_subject_url_prefix % start_value
     headers = {'User-Agent': random.choice(constants.USER_AGENT)}
 
@@ -46,6 +53,10 @@ while True:
     r.encoding = 'utf-8'
     search_subject_result = json.loads(r.text)
     id_list = []
+    if not search_subject_result["data"]:
+        print(search_subject_url+"返回的数据为" + search_subject_result)
+        break
+
     for subject in search_subject_result["data"]:
         print(subject["url"])
         id_list.append(subject["id"])
@@ -54,7 +65,7 @@ while True:
     start_value += 20
     Utils.Utils.delay(2, 4)
 
-    if start_value > 500:
+    if start_value > 200000:
         break
 
 # # 读取抓取配置

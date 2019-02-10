@@ -46,12 +46,13 @@ class Utils:
             if movie:
                 db_helper.insert_movie(movie)
 
-            image_name = "ratio_poster\\%s.jpg" % i
-            # 下载验证码图片并保存到当前目录
+            image_name = constants.RATIO_POSTER_PATH + "%s.jpg" % i
+            # 下载图片并保存到当前目录
             ratio_poster_image = open(image_name, 'wb')
-            captcha_request = requests.get(movie['ratio_poster'])
-            ratio_poster_image.write(captcha_request.content)
-            captcha_request.close()
+            retio_poster_request = requests.get(movie['ratio_poster'])
+            ratio_poster_image.write(retio_poster_request.content)
+            ratio_poster_image.close()
+            retio_poster_request.close()
 
             Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
 

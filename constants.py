@@ -24,6 +24,9 @@ DELAY_MAX_SECOND = 4
 # 豆瓣电影的url前缀
 URL_PREFIX = 'https://movie.douban.com/subject/'
 
+DATA_PATH = 'data'
+RATIO_POSTER_PATH = 'data\\ratio_poster'
+
 """
 这里用到了阿布云代理动态版。使用影梭或者其他代理，甚至不用代理也可以
 """
@@ -46,3 +49,4 @@ proxies = {
     "http": proxyMeta,
     "https": proxyMeta,
 }
+
