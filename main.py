@@ -12,6 +12,9 @@ from page_parser import MovieParser
 from utils import Utils
 from utils import ForbiddenError
 from storage import DbHelper
+import logging
+
+logging.basicConfig(filename='logger.log', level=logging.INFO)
 
 # 读取配置文件信息
 config = configparser.ConfigParser()
@@ -24,6 +27,7 @@ cookie_helper = CookiesHelper.CookiesHelper(
 )
 cookies = cookie_helper.get_cookies()
 print(cookies)
+
 
 # 实例化爬虫类和数据库连接工具类
 movie_parser = MovieParser.MovieParser()
@@ -53,6 +57,7 @@ while True:
         )
         if r.status_code == '403':
             print(search_subject_url+"403")
+            logging.error(search_subject_url+"403")
             raise ForbiddenError
             break
         r.encoding = 'utf-8'
@@ -60,10 +65,12 @@ while True:
         id_list = []
         if not search_subject_result["data"]:
             print(search_subject_url+"返回的数据为" + search_subject_result)
+            logging.error(search_subject_url+"返回的数据为" + search_subject_result)
             break
 
         for subject in search_subject_result["data"]:
             print(subject["title"]+subject["url"])
+            logging.info(subject["title"]+subject["url"])
             id_list.append(subject["id"])
 
         Utils.Utils.request_and_parse_movies(id_list, movie_parser, db_helper, cookies)
@@ -71,6 +78,7 @@ while True:
         print("403forbidden")
         break
 
+    print("start value %s done" % start_value)
     start_value += 20
 
     Utils.Utils.delay(1, 2)

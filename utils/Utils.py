@@ -6,6 +6,7 @@ import time
 import random
 import constants
 import requests
+import logging
 
 from utils import ForbiddenError
 
@@ -18,6 +19,7 @@ class Utils:
 
     @staticmethod
     def request_and_parse_movies(id_list, movie_parser, db_helper, cookies):
+        logging.info("request_and_parse_movies log")
         # 通过ID进行遍历
         for i in id_list:
 
@@ -58,7 +60,7 @@ class Utils:
             ratio_poster_image.write(retio_poster_request.content)
             ratio_poster_image.close()
             retio_poster_request.close()
-
+            logging.info(str(i)+" DONE")
             Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
 
     @staticmethod
