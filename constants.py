@@ -18,8 +18,8 @@ USER_AGENT = [
 AGENT_SIZE = 7
 
 # 延时设置
-DELAY_MIN_SECOND = 1
-DELAY_MAX_SECOND = 2
+DELAY_MIN_SECOND = 0.2
+DELAY_MAX_SECOND = 0.21
 
 # 豆瓣电影的url前缀
 URL_PREFIX = 'https://movie.douban.com/subject/'

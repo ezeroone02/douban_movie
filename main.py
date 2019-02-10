@@ -53,7 +53,7 @@ while True:
             search_subject_url,
             headers=headers,
             cookies=cookies,
-            # proxies=constants.proxies
+            proxies=constants.proxies
         )
         if r.status_code == '403':
             print(search_subject_url+"403")
@@ -81,7 +81,7 @@ while True:
     print("start value %s done" % start_value)
     start_value += 20
 
-    Utils.Utils.delay(1, 2)
+    Utils.Utils.delay(constants.DELAY_MIN_SECOND, constants.DELAY_MAX_SECOND)
 
     if start_value > 200000:
         break

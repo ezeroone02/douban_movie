@@ -29,7 +29,8 @@ class Utils:
             r = requests.get(
                 constants.URL_PREFIX + str(i),
                 headers=headers,
-                cookies=cookies
+                cookies=cookies,
+                proxies=constants.proxies
             )
             r.encoding = 'utf-8'
             if r.status_code == '403':
